@@ -16,7 +16,7 @@ const AdvancedWidgetBuilder = () => {
 
      const addComponent = (type) => {
           const newId = components.length + 1;
-          const newComponent = { id: newId, type, position: { x: 0, y: 0 } };
+          const newComponent = { id: newId, type, position: { x: -100, y: 100 } };
           setComponents((prevComponents) => [...prevComponents, newComponent]);
      };
 
@@ -54,7 +54,7 @@ const AdvancedWidgetBuilder = () => {
                     <button onClick={() => addComponent(buttonNames.card)}>Card</button>
                </div>
 
-               <div>
+               <div style={{ backgroundColor: 'lightgray'}}>
                     <button onClick={saveWidgetState}>Save</button>
                     <button onClick={loadWidgetState}>Load</button>
                </div>
