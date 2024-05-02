@@ -5,6 +5,9 @@ import AdvancedWidgetBuilder from './components/AdvancedWidgetBuilder'; // new i
 function App() {
      return (
           <div>
+               <br />
+               <button onClick={() => localStorage.clear()}>Clear Local Storage</button>
+
                <h1>Basic Widget Builder</h1>
                <WidgetBuilder />
                <br />

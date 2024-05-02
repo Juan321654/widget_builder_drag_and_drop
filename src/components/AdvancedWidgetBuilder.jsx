@@ -1,37 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Draggable from 'react-draggable';
 
-const DraggableButton = ({ id, position, updatePosition, text = "" }) => {
-     const handleDrag = (e, data) => {
-          updatePosition(id, { x: data.x, y: data.y });
-     };
-
-     return (
-          <Draggable
-               position={position}
-               onDrag={handleDrag}
-          >
-               <button>{text} {id}</button>
-          </Draggable>
-     );
-};
-
-const DraggableCard = ({ id, position, updatePosition }) => {
-     const handleDrag = (e, data) => {
-          updatePosition(id, { x: data.x, y: data.y });
-     };
-
-     return (
-          <Draggable
-               position={position}
-               onDrag={handleDrag}
-          >
-               <div style={{ border: '1px solid blue', padding: '10px' }}>
-                    Card {id}
-               </div>
-          </Draggable>
-     );
-};
+const buttonNames = {
+     btnOn: "btnOn",
+     btnOff: "btnOff",
+     card: "card"
+}
 
 const AdvancedWidgetBuilder = () => {
      const [components, setComponents] = useState([]);
@@ -54,6 +28,12 @@ const AdvancedWidgetBuilder = () => {
           );
      };
 
+     const deleteComponent = (id) => {
+          setComponents((prevComponents) =>
+               prevComponents.filter((comp) => comp.id !== id)
+          );
+     };
+
      const saveWidgetState = () => {
           localStorage.setItem('widgetState', JSON.stringify(components));
      };
@@ -66,12 +46,15 @@ const AdvancedWidgetBuilder = () => {
      };
 
      return (
-          <div style={{ display: 'flex' }}>
-               <div style={{ marginRight: '20px' }}>
+          <div style={{ display: 'flex', gap: '1rem' }}>
+               <div>
                     <h3>Components</h3>
-                    <button onClick={() => addComponent('button')}>Add Button</button>
-                    <button onClick={() => addComponent('btnOn')}>On</button>
-                    <button onClick={() => addComponent('card')}>Add Card</button>
+                    <button onClick={() => addComponent(buttonNames.btnOn)}>On</button>
+                    <button onClick={() => addComponent(buttonNames.btnOff)}>Off</button>
+                    <button onClick={() => addComponent(buttonNames.card)}>Card</button>
+               </div>
+
+               <div>
                     <button onClick={saveWidgetState}>Save</button>
                     <button onClick={loadWidgetState}>Load</button>
                </div>
@@ -79,14 +62,34 @@ const AdvancedWidgetBuilder = () => {
                <div style={{ width: 400, height: 300, border: '1px solid black', position: 'relative' }}>
                     {
                          components.map((comp) => {
-                              if (comp.type === 'button') return <DraggableButton key={comp.id} id={comp.id} position={comp.position} updatePosition={updatePosition} />
-                              if (comp.type === 'card') return <DraggableCard key={comp.id} id={comp.id} position={comp.position} updatePosition={updatePosition} />
-                              if (comp.type === 'btnOn') return <DraggableButton key={comp.id} id={comp.id} position={comp.position} updatePosition={updatePosition} text="On" />
+                              return (
+                                   <DraggableComponent key={comp.id} comp={comp} updatePosition={updatePosition} deleteComponent={deleteComponent}></DraggableComponent>
+                              );
                          })
                     }
                </div>
           </div>
      );
 };
+
+function DraggableComponent({ comp = {}, updatePosition = () => { }, deleteComponent = () => { } }) {
+     let componentToRender = null;
+     if (comp.type === buttonNames.btnOn) componentToRender = <button>On</button>;
+     if (comp.type === buttonNames.btnOff) componentToRender = <button>Off</button>;
+     if (comp.type === buttonNames.card) componentToRender = <div style={{ border: '1px solid red', padding: '5px' }}>Card</div>;
+
+     const handleRightClick = (e) => {
+          e.preventDefault(); // Prevent the default context menu from showing up
+          deleteComponent(comp.id);
+     };
+
+     return (
+          <Draggable position={comp.position} onDrag={(e, data) => updatePosition(comp.id, { x: data.x, y: data.y })}>
+               <div style={{ position: 'absolute' }} onContextMenu={handleRightClick}>
+                    {componentToRender}
+               </div>
+          </Draggable>
+     );
+}
 
 export default AdvancedWidgetBuilder;
