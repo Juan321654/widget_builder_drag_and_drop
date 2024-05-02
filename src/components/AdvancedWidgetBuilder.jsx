@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Draggable from 'react-draggable';
 
-const DraggableButton = ({ id, position, updatePosition }) => {
+const DraggableButton = ({ id, position, updatePosition, text = "" }) => {
      const handleDrag = (e, data) => {
           updatePosition(id, { x: data.x, y: data.y });
      };
@@ -11,7 +11,7 @@ const DraggableButton = ({ id, position, updatePosition }) => {
                position={position}
                onDrag={handleDrag}
           >
-               <button>Button {id}</button>
+               <button>{text} {id}</button>
           </Draggable>
      );
 };
@@ -70,20 +70,20 @@ const AdvancedWidgetBuilder = () => {
                <div style={{ marginRight: '20px' }}>
                     <h3>Components</h3>
                     <button onClick={() => addComponent('button')}>Add Button</button>
-                    <button onClick={() => addComponent('onBtn')}>On</button>
+                    <button onClick={() => addComponent('btnOn')}>On</button>
                     <button onClick={() => addComponent('card')}>Add Card</button>
                     <button onClick={saveWidgetState}>Save</button>
                     <button onClick={loadWidgetState}>Load</button>
                </div>
 
                <div style={{ width: 400, height: 300, border: '1px solid black', position: 'relative' }}>
-                    {components.map((comp) =>
-                         comp.type === 'button' ? (
-                              <DraggableButton key={comp.id} id={comp.id} position={comp.position} updatePosition={updatePosition} />
-                         ) : (
-                              <DraggableCard key={comp.id} id={comp.id} position={comp.position} updatePosition={updatePosition} />
-                         )
-                    )}
+                    {
+                         components.map((comp) => {
+                              if (comp.type === 'button') return <DraggableButton key={comp.id} id={comp.id} position={comp.position} updatePosition={updatePosition} />
+                              if (comp.type === 'card') return <DraggableCard key={comp.id} id={comp.id} position={comp.position} updatePosition={updatePosition} />
+                              if (comp.type === 'btnOn') return <DraggableButton key={comp.id} id={comp.id} position={comp.position} updatePosition={updatePosition} text="On" />
+                         })
+                    }
                </div>
           </div>
      );
