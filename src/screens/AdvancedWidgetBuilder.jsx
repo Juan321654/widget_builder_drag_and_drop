@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Draggable from 'react-draggable';
-
-const buttonNames = {
-     btnOn: "btnOn",
-     btnOff: "btnOff",
-     card: "card"
-}
+import { buttonNames } from '../helpers/buttonNamesDictionary';
+import DraggableComponent from '../components/DraggableComponent';
 
 const AdvancedWidgetBuilder = () => {
      const [components, setComponents] = useState([]);
@@ -63,7 +58,7 @@ const AdvancedWidgetBuilder = () => {
                     {
                          components.map((comp) => {
                               return (
-                                   <DraggableComponent key={comp.id} comp={comp} updatePosition={updatePosition} deleteComponent={deleteComponent}></DraggableComponent>
+                                   <DraggableComponent key={comp.id} widgetData={comp} updatePosition={updatePosition} deleteComponent={deleteComponent}></DraggableComponent>
                               );
                          })
                     }
@@ -72,24 +67,5 @@ const AdvancedWidgetBuilder = () => {
      );
 };
 
-function DraggableComponent({ comp = {}, updatePosition = () => { }, deleteComponent = () => { } }) {
-     let componentToRender = null;
-     if (comp.type === buttonNames.btnOn) componentToRender = <button>On</button>;
-     if (comp.type === buttonNames.btnOff) componentToRender = <button>Off</button>;
-     if (comp.type === buttonNames.card) componentToRender = <div style={{ border: '1px solid red', padding: '5px' }}>Card</div>;
-
-     const handleRightClick = (e) => {
-          e.preventDefault(); // Prevent the default context menu from showing up
-          deleteComponent(comp.id);
-     };
-
-     return (
-          <Draggable position={comp.position} onDrag={(e, data) => updatePosition(comp.id, { x: data.x, y: data.y })}>
-               <div style={{ position: 'absolute' }} onContextMenu={handleRightClick}>
-                    {componentToRender}
-               </div>
-          </Draggable>
-     );
-}
 
 export default AdvancedWidgetBuilder;
