@@ -1,11 +1,29 @@
 import Draggable from "react-draggable";
 import { buttonNames } from "../helpers/buttonNamesDictionary";
 
+function ButtonOn() {
+     const handleClick = () => console.log("On Clicked");
+     return <button onClick={handleClick}>On</button>
+}
+
+function ButtonOff() {
+     return <button>Off</button>
+}
+
+function Card() {
+     return <div style={{ border: '1px solid red', padding: '5px' }}>Card</div>
+
+}
+
+function DefaultComponent() {
+     return <div>Default Component</div>
+}
+
 function DraggableComponent({ widgetData = {}, updatePosition = () => { }, deleteComponent = () => { }, disabled = false }) {
-     let componentToRender = null;
-     if (widgetData.type === buttonNames.btnOn) componentToRender = <button>On</button>;
-     if (widgetData.type === buttonNames.btnOff) componentToRender = <button>Off</button>;
-     if (widgetData.type === buttonNames.card) componentToRender = <div style={{ border: '1px solid red', padding: '5px' }}>Card</div>;
+     let componentToRender = <DefaultComponent />;
+     if (widgetData.type === buttonNames.btnOn) componentToRender = <ButtonOn />;
+     if (widgetData.type === buttonNames.btnOff) componentToRender = <ButtonOff />;
+     if (widgetData.type === buttonNames.card) componentToRender = <Card />;
 
      const handleRightClick = (e) => {
           e.preventDefault(); // Prevent the default context menu from showing up

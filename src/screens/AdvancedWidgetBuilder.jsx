@@ -24,9 +24,7 @@ const AdvancedWidgetBuilder = () => {
      };
 
      const deleteComponent = (id) => {
-          setComponents((prevComponents) =>
-               prevComponents.filter((comp) => comp.id !== id)
-          );
+          setComponents((prevComponents) => prevComponents.filter((comp) => comp.id !== id));
      };
 
      const saveWidgetState = () => {
@@ -35,9 +33,7 @@ const AdvancedWidgetBuilder = () => {
 
      const loadWidgetState = () => {
           const savedState = JSON.parse(localStorage.getItem('widgetState'));
-          if (savedState) {
-               setComponents(savedState);
-          }
+          if (savedState) setComponents(savedState);
      };
 
      return (
@@ -49,7 +45,7 @@ const AdvancedWidgetBuilder = () => {
                     <button onClick={() => addComponent(buttonNames.card)}>Card</button>
                </div>
 
-               <div style={{ backgroundColor: 'lightgray'}}>
+               <div style={{ backgroundColor: 'lightgray' }}>
                     <button onClick={saveWidgetState}>Save</button>
                     <button onClick={loadWidgetState}>Load</button>
                </div>
